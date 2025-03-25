@@ -92,6 +92,8 @@ util_ot <- cc_util %>%
 
 heatmap(cor(cc))
 
+corrplot(cor(cc), method = "square")
+
 #
 # EDA Summary
 # Debt balances tend to decrease over time
