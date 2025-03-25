@@ -22,11 +22,13 @@
 # LOOCV
 # Pruning
 
+library(tidyverse)
+
 resetdata <- function() {
-  cc <- read.csv("UCI_Credit_Card.csv")
-  cc <- cc[, -1]
-  colnames(cc)[colnames(cc) == "default.payment.next.month"] <- "DEFAULT"
-  assign("cc", cc, envir = .GlobalEnv)
+  data <- read.csv("UCI_Credit_Card.csv")
+  data <- data[, -1]
+  colnames(data)[colnames(data) == "default.payment.next.month"] <- "DEFAULT"
+  assign("cc", data, envir = .GlobalEnv)
 }
 
 cc <- read.csv("UCI_Credit_Card.csv")
@@ -77,8 +79,9 @@ for (col_name in names(cc[,12:23])) {
 #     UTIL6 = BILL_AMT6 / LIMIT_BAL
 #   )
 
+#Percent Credit Utilization
 cc <- cc %>%
-  mutate(UTIL = rowMeans(select(., starts_with("BILL_AMT"))) / LIMIT_BAL)
+  mutate(UTIL = rowMeans(select(., starts_with("BILL"))) / LIM)
 
 cc_util <- cc %>% 
   filter(if_all(starts_with("UTIL"), ~ between(., 0, 1))) 
