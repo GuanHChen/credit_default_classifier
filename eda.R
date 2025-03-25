@@ -90,11 +90,15 @@ util_ot <- cc_util %>%
   summarize(across(starts_with("UTIL"), mean)) %>%
   as.numeric()
 
+heatmap(cor(cc))
+
 #
 # EDA Summary
 # Debt balances tend to decrease over time
 # Credit utilization over time seems to match debt balances plot
 # The amount paid per month seems to be random
+# The bill per month seems to be highly consistent
+# Repayment behavior seems to be somewhat consistent also
 #
 
 
