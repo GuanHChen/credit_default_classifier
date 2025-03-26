@@ -41,7 +41,7 @@ Average Payment
 Late Payment Count
 Debt Difference
 
-Step 4: Feature Scaling 
+Step 4: Feature Scaling
 normalize all numerical data
 
 Step 5: Feature Selection
@@ -58,8 +58,7 @@ Downsampling
 """
 
 import pandas as pd
-cc = pd.read_csv("UCI_Credit_Card.csv", index_col=0)
-
-pd.set_option('display.max_columns', None)
+cc = pd.read_csv("UCI_Dataset.csv", index_col=0)
 print(cc.describe())
+
 
