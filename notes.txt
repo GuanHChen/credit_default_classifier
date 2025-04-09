@@ -25,12 +25,17 @@ PAY_AMT5: Amount of previous payment in May, 2005 (NT dollar)
 PAY_AMT6: Amount of previous payment in April, 2005 (NT dollar)
 default.payment.next.month: Default payment (1=yes, 0=no)
 
-One Hot Encoding
-Sex: 0 = Female     1 = Male
+Encoding Categorical Variables
+Binary Encoding of Sex:
+0 = Female     1 = Male
 
+Ordinal Encoding of Education:
+0 = Unknown      1 = High School        2 = University      3 = Graduate School
+
+One Hot Encoding of Marriage
 
 Step 3: Feature Engineering
-TS Debt to limit ratio or Average debt to limit ratio (Credit util)
+Credit Util (Avg)
 Average Bill
 Average Payment
 Late Payment Count
