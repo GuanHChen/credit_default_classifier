@@ -1,8 +1,8 @@
 import pandas as pd
-import statistics as s
 from sklearn.preprocessing import OneHotEncoder
 
-dd = pd.read_csv("UCI_Dataset.csv", index_col=0)
+dd = pd.read_csv("UCI_Dataset.csv")
+dd.drop(columns = 'ID', inplace = True)
 
 new_cols = ['lim', 'sex', 'edu', 'mar', 'age', 'repay1', 'repay2', 'repay3', 'repay4',
             'repay5', 'repay6', 'bill1', 'bill2', 'bill3', 'bill4', 'bill5', 'bill6',
@@ -74,14 +74,29 @@ Credit utilization
 """
 
 dd['util'] = dd[['bill1', 'bill2', 'bill3', 'bill4', 'bill5', 'bill6']].sum(axis=1) / (6 * dd['lim'])
+# 269/838 outlier utils = 32%
+# 6636/30000 Overall = 22%
+# 218/637 Greater than 1 = 34% Statistically Significant!
+# 51/201 Less than 0 = 25% Statistically Insig
+
+repay_cols = ['repay1', 'repay2', 'repay3', 'repay4', 'repay5', 'repay6'] # list of the repayment variables
+dd['late'] = (dd[repay_cols] > 0).sum(axis=1) # count of total late payments
+
+bill_cols = ['bill1','bill2','bill3','bill4','bill5','bill6'] # list of the bill variables (spending)
+dd['vol'] = dd[bill_cols].var(axis=1) # variance in spending
+
+target = dd.pop('default')
+dd['default'] = target # make default the last column
+
+scale_cols = ['lim','age',
+              'repay1','repay2','repay3','repay4','repay5','repay6',
+              'bill1','bill2','bill3','bill4','bill5','bill6',
+              'pay1','pay2','pay3','pay4','pay5','pay6',
+              'util','late','vol']
 
 
 
-
-
-print(dd['util'].describe())
-print((dd['util'] < 0).sum())
+#print(dd[['repay1', 'repay2','repay3','repay4','repay5','repay6','late']].tail())
+#print(dd[['bill1','bill2','bill3','bill4','bill5','bill6','vol']].tail())
 #print(dd['mar'].value_counts())
-
-
-
+print(dd.columns)
