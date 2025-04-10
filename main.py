@@ -1,8 +1,10 @@
 import pandas as pd
-from sklearn.preprocessing import OneHotEncoder
+import numpy as np
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.model_selection import train_test_split
 
 dd = pd.read_csv("UCI_Dataset.csv")
-dd.drop(columns = 'ID', inplace = True)
+dd.drop(columns='ID', inplace=True)
 
 new_cols = ['lim', 'sex', 'edu', 'mar', 'age', 'repay1', 'repay2', 'repay3', 'repay4',
             'repay5', 'repay6', 'bill1', 'bill2', 'bill3', 'bill4', 'bill5', 'bill6',
@@ -60,7 +62,7 @@ mar_df = mar_df.iloc[:, [1,2]]
 dd_part1 = dd.iloc[:, :4]
 dd_part2 = dd.iloc[:, 4:]
 dd = pd.concat([dd_part1, mar_df, dd_part2], axis=1)
-dd.drop(columns = 'mar', inplace = True)
+dd.drop(columns='mar', inplace=True)
 dd = dd.rename(columns={'mar_1': 'married', 'mar_2': 'single'})
 
 # Insert the encoded dataframe where the mar variable is
@@ -88,15 +90,32 @@ dd['vol'] = dd[bill_cols].var(axis=1) # variance in spending
 target = dd.pop('default')
 dd['default'] = target # make default the last column
 
+
+
+"""
+End of preprocessing
+"""
+
 scale_cols = ['lim','age',
-              'repay1','repay2','repay3','repay4','repay5','repay6',
               'bill1','bill2','bill3','bill4','bill5','bill6',
               'pay1','pay2','pay3','pay4','pay5','pay6',
               'util','late','vol']
 
+X = dd.drop('default', axis=1)
+y = dd['default']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=123, stratify=y)
+
+scaler = StandardScaler() # initialize scaler
+
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
 
 
 #print(dd[['repay1', 'repay2','repay3','repay4','repay5','repay6','late']].tail())
 #print(dd[['bill1','bill2','bill3','bill4','bill5','bill6','vol']].tail())
 #print(dd['mar'].value_counts())
-print(dd.columns)
+print(type(X_train_scaled))
+#print(X_test_scaled)
+
+
