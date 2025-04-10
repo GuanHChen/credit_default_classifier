@@ -90,12 +90,6 @@ dd['vol'] = dd[bill_cols].var(axis=1) # variance in spending
 target = dd.pop('default')
 dd['default'] = target # make default the last column
 
-
-
-"""
-End of preprocessing
-"""
-
 scale_cols = ['lim','age',
               'bill1','bill2','bill3','bill4','bill5','bill6',
               'pay1','pay2','pay3','pay4','pay5','pay6',
