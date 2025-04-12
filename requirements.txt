@@ -1,3 +1,4 @@
 uv
 pandas
 scikit-learn
+matplotlib
