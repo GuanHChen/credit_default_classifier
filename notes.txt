@@ -120,6 +120,18 @@ Optuna Recall:
            1       0.70      0.36      0.47      1327
     accuracy                           0.82      6000
 
+Basic XGBoost:
+              precision    recall  f1-score   support
+           0       0.84      0.94      0.89      4673
+           1       0.62      0.37      0.46      1327
+    accuracy                           0.81      6000
+
+Hyper Hypertuned XGBoost:
+              precision    recall  f1-score   support
+           0       0.84      0.96      0.89      4673
+           1       0.71      0.35      0.46      1327
+    accuracy                           0.82      6000
+
 
 Hyperparameter Tuning
 
@@ -162,6 +174,12 @@ Optuna Recall
 
 F1 and Recall Same Parameters
 
+Basic XGBoost: 1000 estimators, 0.1 learning rate, max depth 50
+AUC: 0.7509
+
+Hyper Hypertuned XGBoost
+{'n_estimators': 1359, 'eta': 0.09796148646799241, 'max_depth': 32, 'gamma': 9, 'alpha': 8, 'reg_lambda': 6, 'max_delta_step': 1, 'min_child_weight': 16}
+AUC: 0.7872
 
 
 
