@@ -104,23 +104,29 @@ Hyperparameter Tuned:
 
 Optuna ROC_AUC:
               precision    recall  f1-score   support
-
            0       0.84      0.96      0.89      4673
            1       0.70      0.36      0.47      1327
     accuracy                           0.82      6000
 
 Optuna F1:
               precision    recall  f1-score   support
-
            0       0.84      0.96      0.89      4673
            1       0.70      0.36      0.47      1327
     accuracy                           0.82      6000
 
 Optuna Recall:
-
+              precision    recall  f1-score   support
+           0       0.84      0.96      0.89      4673
+           1       0.70      0.36      0.47      1327
+    accuracy                           0.82      6000
 
 
 Hyperparameter Tuning
+
+n_estimators = trial.suggest_int('n_estimators', 100, 2000)
+max_depth = trial.suggest_int('max_depth', 10, 50)
+min_samples_split = trial.suggest_int('min_samples_split', 10, 1000)
+min_samples_leaf = trial.suggest_int('min_samples_leaf', 1, 500)
 
 param_grid = [{
     'n_estimators': [250, 500, 750, 1000, 1250, 1500],
