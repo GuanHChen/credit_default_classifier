@@ -2,3 +2,6 @@ uv
 pandas
 scikit-learn
 matplotlib
+optuna
+xgboost
+plotly

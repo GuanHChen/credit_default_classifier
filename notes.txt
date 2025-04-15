@@ -56,6 +56,70 @@ Downsampling
 
 
 
+
+Binary encoding of SEX variable
+Female = 0
+Male = 1
+
+
+Ordinal encoding of EDUCATION
+0 = Others, Unknown         280+123+51+14
+1 = High School             4917
+2 = University              14030
+3 = Graduate School         10585
+
+
+
+One-hot encoding of MARRIAGE
+0 = Not sure what this is   54
+1 = Married                 13659
+2 = Single                  15964
+3 = Other                   323
+
+Single and Married will be one hot encoded
+Values of 0 and for Other will be dropped. If someone is neither married or single,
+the other category is implicit
+
+Feature Engineering
+Credit utilization
+637 Counts have utilization greater than 1
+201 Counts have utilization less than 0
+
+
+
+Modelling
+Random Forest
+
+Normal Model:
+              precision    recall  f1-score   support
+           0       0.84      0.94      0.89      4673
+           1       0.65      0.37      0.47      1327
+    accuracy                           0.82      6000
+
+Hyperparameter Tuned:
+              precision    recall  f1-score   support
+           0       0.84      0.96      0.89      4673
+           1       0.70      0.36      0.48      1327
+    accuracy                           0.82      6000
+
+Optuna ROC_AUC:
+              precision    recall  f1-score   support
+
+           0       0.84      0.96      0.89      4673
+           1       0.70      0.36      0.47      1327
+    accuracy                           0.82      6000
+
+Optuna F1:
+              precision    recall  f1-score   support
+
+           0       0.84      0.96      0.89      4673
+           1       0.70      0.36      0.47      1327
+    accuracy                           0.82      6000
+
+Optuna Recall:
+
+
+
 Hyperparameter Tuning
 
 param_grid = [{
@@ -78,3 +142,20 @@ grid_search = GridSearchCV(rf,
 grid_search.fit(X_val, y_val)
 print(grid_search.best_score_) # 0.7861319869359884
 print(grid_search.best_params_) # {'criterion': 'entropy', 'max_depth': 20, 'min_samples_leaf': 10, 'min_samples_split': 100, 'n_estimators': 1500}
+
+Optuna ROC_AUC
+{'n_estimators': 1809, 'max_depth': 31, 'min_samples_split': 123, 'min_samples_leaf': 27}
+AUC: 0.7878
+
+Optuna F1
+{'n_estimators': 1086, 'max_depth': 41, 'min_samples_split': 115, 'min_samples_leaf': 2}
+AUC: 0.7874
+
+Optuna Recall
+{'n_estimators': 1086, 'max_depth': 41, 'min_samples_split': 115, 'min_samples_leaf': 2}
+
+F1 and Recall Same Parameters
+
+
+
+
