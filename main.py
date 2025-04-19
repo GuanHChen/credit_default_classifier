@@ -163,7 +163,8 @@ rf = RandomForestClassifier(
     min_samples_leaf=27,
     min_samples_split=123,
     n_estimators=1809,
-    random_state=123
+    random_state=123,
+    n_jobs=-1
 )
 
 rf2 = RandomForestClassifier()
