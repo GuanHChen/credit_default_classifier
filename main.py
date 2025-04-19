@@ -169,9 +169,9 @@ rf = RandomForestClassifier(
 
 #report(rf)
 
-bm = xgb.XGBClassifier(objective='binary:logistic',  # Or 'multi:softmax' for multi-class
+bm = xgb.XGBClassifier(objective='binary:logistic', # Or 'multi:softmax' for multi-class
                        n_estimators=1359,          # Number of boosting rounds (trees)
-                       eta=0.09796,         # Step size shrinkage to prevent overfitting
+                       eta=0.09796,                # Step size shrinkage to prevent overfitting
                        max_depth=32,               # Maximum depth of a tree
                        #gamma=9,
                        #alpha=8,

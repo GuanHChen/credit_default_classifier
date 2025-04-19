@@ -126,11 +126,17 @@ Basic XGBoost:
            1       0.62      0.37      0.46      1327
     accuracy                           0.81      6000
 
-Hyper Hypertuned XGBoost:
+Hyper Hypertuned XGBoost AUCPR:
               precision    recall  f1-score   support
            0       0.84      0.96      0.89      4673
            1       0.71      0.35      0.46      1327
     accuracy                           0.82      6000
+
+Tuned XGBoost No Regularization AUCPR:
+              precision    recall  f1-score   support
+           0       0.84      0.92      0.88      4673
+           1       0.59      0.38      0.46      1327
+    accuracy                           0.80      6000
 
 
 Hyperparameter Tuning
@@ -181,5 +187,5 @@ Hyper Hypertuned XGBoost
 {'n_estimators': 1359, 'eta': 0.09796148646799241, 'max_depth': 32, 'gamma': 9, 'alpha': 8, 'reg_lambda': 6, 'max_delta_step': 1, 'min_child_weight': 16}
 AUC: 0.7872
 
-
-
+Tuned XGBoost No Regularization AUCPR:
+AUC: 0.7446
