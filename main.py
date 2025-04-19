@@ -1,4 +1,5 @@
 import pandas as pd
+import time
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
@@ -158,16 +159,24 @@ X_val = ct.transform(X_val)
 
 rf = RandomForestClassifier(
     criterion='entropy',
-    max_depth=41,
-    min_samples_leaf=2,
-    min_samples_split=115,
-    n_estimators=1086,
+    max_depth=31,
+    min_samples_leaf=27,
+    min_samples_split=123,
+    n_estimators=1809,
     random_state=123
 )
 
-#rf.fit(X_train, y_train)
+rf2 = RandomForestClassifier()
 
-#report(rf)
+start_time = time.time()
+rf.fit(X_train, y_train)
+end_time = time.time()
+
+elapsed = end_time - start_time
+
+print(elapsed)
+
+report(rf)
 
 bm = xgb.XGBClassifier(objective='binary:logistic', # Or 'multi:softmax' for multi-class
                        n_estimators=1359,          # Number of boosting rounds (trees)
@@ -181,7 +190,7 @@ bm = xgb.XGBClassifier(objective='binary:logistic', # Or 'multi:softmax' for mul
                        eval_metric='aucpr',
                        random_state=123)           # For reproducibility
 
-bm.fit(X_train, y_train)
-report(bm)
+#bm.fit(X_train, y_train)
+#report(bm)
 
 #optimize(obj2)
