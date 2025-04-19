@@ -5,7 +5,7 @@
 # Step 2: Variable Treatment
 # Sex, Ed, Marriage >>> One hot encoded
 # Ed combine 4+
-#   
+# 
 # Step 3: Feature Engineering
 # TS Debt to limit ratio or Average debt to limit ratio (Credit util)
 # Average Bill
@@ -25,13 +25,13 @@
 library(tidyverse)
 
 resetdata <- function() {
-  data <- read.csv("UCI_Credit_Card.csv")
+  data <- read.csv("UCI_Dataset.csv")
   data <- data[, -1]
   colnames(data)[colnames(data) == "default.payment.next.month"] <- "DEFAULT"
   assign("cc", data, envir = .GlobalEnv)
 }
 
-cc <- read.csv("UCI_Credit_Card.csv")
+cc <- read.csv("UCI_Dataset.csv")
 cc <- cc[, -1]
 colnames(cc)[colnames(cc) == "default.payment.next.month"] <- "DEFAULT"
 
