@@ -112,7 +112,7 @@ ggplot(cc, aes(x = default_factor)) +
   labs(
     title = "Default Imbalance",
     x = "Default Status",
-    y = "Samples"
+    y = "Number of Individuals"
   ) +
   theme_classic() +
   theme(plot.title = element_text(size = 20, hjust = 0.5),       # Title size
@@ -129,7 +129,7 @@ ggplot(cc, aes(x = AGE)) +
   labs(
     title = "Age Distribution",
     x = "Age",
-    y = "Samples"
+    y = "Number of Individuals"
   ) +
   theme_classic() +
   theme(plot.title = element_text(size = 20, hjust = 0.5),       # Title size
@@ -141,12 +141,12 @@ ggplot(cc, aes(x = AGE)) +
 
 
 # Marriage Distribution
-ggplot(cc, aes(x = MARRIAGE)) +
+ggplot(cc, aes(x = factor(MARRIAGE))) +
   geom_bar(fill = "darkgray", color = "black") + # You can customize the colors
   labs(
     title = "Marriage Distribution",
     x = "Relationship Status",
-    y = "Samples"
+    y = "Number of Individuals"
   ) +
   scale_x_discrete(labels = c("Other", "Single", "Married")) +
   theme_classic() +
@@ -157,8 +157,22 @@ ggplot(cc, aes(x = MARRIAGE)) +
         axis.text.y = element_text(size = 12),                  # Y-axis tick label size
   ) 
 
-
-
+# Sex Distribution
+ggplot(cc, aes(x = factor(SEX))) +
+  geom_bar(fill = "darkgray", color = "black") + # You can customize the colors
+  labs(
+    title = "Sex Distribution",
+    x = "Sex",
+    y = "Number of Individuals"
+  ) +
+  scale_x_discrete(labels = c("Male", "Female")) +
+  theme_classic() +
+  theme(plot.title = element_text(size = 20, hjust = 0.5),       # Title size
+        axis.title.x = element_text(size = 16),                 # X-axis label size
+        axis.title.y = element_text(size = 16),                 # Y-axis label size
+        axis.text.x = element_text(size = 12),                  # X-axis tick label size
+        axis.text.y = element_text(size = 12),                  # Y-axis tick label size
+)
 
 
 
