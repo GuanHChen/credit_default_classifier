@@ -202,6 +202,27 @@ ggplot(auc_df, aes(x = Model, y = AUC )) +
   ylim(0, .9) # Set the y-axis limits from 0 to 1
 
 
+# Feature importances
+fea_imp <- data.frame(
+  feature = c("Repay1", "Late", "Repay2", "Repay3", "Util", "Vol", "Pay1", "Repay4", "Limit", "Bill1"),
+  importance = c(0.200390, 0.162177, 0.089666, 0.050502, 0.040191, 0.038686, 0.035866, 0.034023, 0.030677, 0.028221)
+)
+fea_imp$feature <- factor(fea_imp$feature, levels = fea_imp$feature)
 
+ggplot(fea_imp, aes(x = feature, y = importance )) +
+  geom_bar(stat = "identity", fill = "darkgray", color = "black") +
+  labs(
+    title = "Random Forest Feature Importances",
+    x = "Feature",
+    y = "Importance"
+  ) +
+  theme_classic() +
+  theme(plot.title = element_text(size = 20, hjust = 0.5),       # Title size
+        axis.title.x = element_text(size = 16),                 # X-axis label size
+        axis.title.y = element_text(size = 16),                 # Y-axis label size
+        axis.text.x = element_text(size = 12, angle = 45, hjust = 1),                  # X-axis tick label size
+        axis.text.y = element_text(size = 12),                  # Y-axis tick label size
+  ) +
+  ylim(0, .25)
 
 
