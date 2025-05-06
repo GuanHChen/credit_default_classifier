@@ -175,5 +175,33 @@ ggplot(cc, aes(x = factor(SEX))) +
 )
 
 
+aucs <- c(.536, .76,.79,.79,.75,.74,.79)
+cate <- c('Literature', 'Default\nForest','AUC\nForest','F1\nForest',
+          'Basic\nXGBoost','No Reg\XGBoost','AUC\nXGBoost')
+auc_df <- data.frame(
+  Model = cate,
+  AUC = aucs
+)
+auc_df$Model <- factor(auc_df$Model, levels = auc_df$Model)
+
+# AUC Graph
+ggplot(auc_df, aes(x = Model, y = AUC )) +
+  geom_bar(stat = "identity", fill = "darkgray", color = "black") +
+  labs(
+    title = "AUC Score Comparison",
+    x = "Model",
+    y = "AUC"
+  ) +
+  theme_classic() +
+  theme(plot.title = element_text(size = 20, hjust = 0.5),       # Title size
+        axis.title.x = element_text(size = 16),                 # X-axis label size
+        axis.title.y = element_text(size = 16),                 # Y-axis label size
+        axis.text.x = element_text(size = 12, angle = 45, hjust = 1),                  # X-axis tick label size
+        axis.text.y = element_text(size = 12),                  # Y-axis tick label size
+  ) +
+  ylim(0, .9) # Set the y-axis limits from 0 to 1
+
+
+
 
 
