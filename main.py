@@ -14,7 +14,8 @@ def report(model):
     # Generates the feature importances and classification report of a model
     y_pred = model.predict(X_test)
     y_pred_proba = model.predict_proba(X_test)[:, 1]
-    features = pd.DataFrame(model.feature_importances_, index=ct.get_feature_names_out())
+    features = pd.DataFrame({'importance': model.feature_importances_}, index=ct.get_feature_names_out()).sort_values(
+        by='importance', ascending=False)
     roc_auc = roc_auc_score(y_test, y_pred_proba)
 
     print(features)
