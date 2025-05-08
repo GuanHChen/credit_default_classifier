@@ -6,7 +6,6 @@ from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import classification_report, roc_auc_score
 import optuna
-import matplotlib.pyplot as plt
 import xgboost as xgb
 
 
