@@ -4,9 +4,54 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.metrics import classification_report, roc_auc_score
+from sklearn.metrics import classification_report, roc_auc_score, brier_score_loss
+from sklearn.inspection import PartialDependenceDisplay
 import optuna
 import xgboost as xgb
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
+def pdp(feature):
+    display = PartialDependenceDisplay.from_estimator(
+        estimator=rf2,
+        X=X_train,
+        features=[feature],
+        kind='both',
+        centered=True,
+        feature_names=ct.get_feature_names_out(),
+        line_kw={'linewidth': 3, 'linestyle': '-'},
+        ice_lines_kw={'alpha': 0.3, 'linewidth': 0.5, 'color': 'lightsteelblue'}
+    )
+
+    plt.suptitle(f'Partial Dependence and ICE Plot for {feature.title()}')  # Add a main title
+    display.axes_[0, 0].set_ylabel('Increased Probability of Default')  # Set y-axis label
+    display.axes_[0, 0].set_xlabel(feature.title())  # Set y-axis label
+    plt.tight_layout()
+    plt.show()
+
+
+def heatmap():
+    plot_cols = ['Limit', 'Sex', 'Edu', 'Mar', 'Age', 'Repay1', 'Repay2', 'Repay3', 'Repay4',
+                 'Repay5', 'Repay6', 'Bill1', 'Bill2', 'Bill3', 'Bill4', 'Bill5', 'Bill6',
+                 'Pay1', 'Pay2', 'Pay3', 'Pay4', 'Pay5', 'Pay6', 'Default']
+
+    plot_dd.columns = plot_cols
+
+    correlation_matrix = plot_dd.corr().abs()
+    cols = correlation_matrix.columns.tolist()
+    cols_reversed = cols[::-1]
+    correlation_matrix = correlation_matrix[cols_reversed]
+
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(correlation_matrix,
+                annot=False,
+                cmap='Oranges',
+                fmt='.2f',
+                cbar_kws={'label': 'Magnitude of Correlation'})
+    plt.title('Correlation Heatmap of Predictors', fontsize=20)
+    plt.tight_layout()
+    plt.show()
 
 
 def report(model):
@@ -21,6 +66,7 @@ def report(model):
     print(f"AUC Score: {roc_auc:.4f}")
     print("\nClassification Report:")
     print(classification_report(y_test, y_pred))
+    print(brier_score_loss(y_test, y_pred_proba))
 
 
 def obj1(trial):
@@ -85,6 +131,7 @@ new_cols = ['lim', 'sex', 'edu', 'mar', 'age', 'repay1', 'repay2', 'repay3', 're
             'pay1', 'pay2', 'pay3', 'pay4', 'pay5', 'pay6', 'default']
 
 dd.columns = new_cols
+plot_dd = dd
 
 dd["sex"] = dd["sex"].replace({2: 0})
 
@@ -129,8 +176,8 @@ dd['late'] = (dd[repay_cols] > 0).sum(axis=1)  # count of total late payments
 bill_cols = ['bill1', 'bill2', 'bill3', 'bill4', 'bill5', 'bill6']  # list of the bill variables (spending)
 dd['vol'] = dd[bill_cols].var(axis=1)  # variance in spending
 
-target = dd.pop('default')
-dd['default'] = target  # make default the last column
+#target = dd.pop('default')
+#dd['default'] = target  # make default the last column
 
 X = dd.drop('default', axis=1)
 y = dd['default']
@@ -145,7 +192,8 @@ scaler = StandardScaler()  # initialize scaler
 scale_cols = ['lim', 'age',
               'bill1', 'bill2', 'bill3', 'bill4', 'bill5', 'bill6',
               'pay1', 'pay2', 'pay3', 'pay4', 'pay5', 'pay6',
-              'util', 'late', 'vol']
+              'util', 'late', 'vol'
+              ]
 
 ct = ColumnTransformer(
     [('scaler', StandardScaler(), scale_cols)],
@@ -157,7 +205,28 @@ X_train = ct.fit_transform(X_train)
 X_test = ct.transform(X_test)
 X_val = ct.transform(X_val)
 
-rf = RandomForestClassifier(
+# Robustness Check
+
+#nr = X.drop('late', axis=1)
+
+#nr_train, nr_test, y_train, y_test = train_test_split(  # 60-20-20 Split for Train, Validation, Test
+#    nr, y, test_size=0.2, random_state=123, stratify=y)
+#nr_train, nr_val, y_train, y_val = train_test_split(
+#    nr_train, y_train, test_size=0.25, random_state=123, stratify=y_train)
+
+#nr_train = ct.fit_transform(nr_train)
+#nr_test = ct.transform(nr_test)
+
+
+
+
+rf1 = RandomForestClassifier(
+    criterion='entropy',
+    n_jobs=-1,
+    random_state=123
+)
+
+rf2 = RandomForestClassifier(
     criterion='entropy',
     max_depth=31,
     min_samples_leaf=27,
@@ -167,19 +236,41 @@ rf = RandomForestClassifier(
     n_jobs=-1
 )
 
-rf2 = RandomForestClassifier()
+rf3 = RandomForestClassifier(
+    criterion='entropy',
+    max_depth=41,
+    min_samples_leaf=2,
+    min_samples_split=115,
+    n_estimators=1086,
+    random_state=123,
+    n_jobs=-1
+)
 
-start_time = time.time()
-rf.fit(X_train, y_train)
-end_time = time.time()
+bm1 = xgb.XGBClassifier(
+    objective='binary:logistic',
+    n_estimators=1000,
+    eta=0.1,
+    max_depth=50,
+    eval_metric='aucpr',
+    random_state=123,
+    n_jobs=-1
+)
 
-elapsed = end_time - start_time
+bm2 = xgb.XGBClassifier(objective='binary:logistic', # Or 'multi:softmax' for multi-class
+                       n_estimators=1359,          # Number of boosting rounds (trees)
+                       eta=0.09796,                # Step size shrinkage to prevent overfitting
+                       max_depth=32,               # Maximum depth of a tree
+                       gamma=9,
+                       alpha=8,
+                       reg_lambda=6,
+                       max_delta_step=1,
+                       min_child_weight=16,
+                       eval_metric='aucpr',
+                       random_state=123,
+                       n_jobs=-1
+)
 
-print(elapsed)
-
-report(rf)
-
-bm = xgb.XGBClassifier(objective='binary:logistic', # Or 'multi:softmax' for multi-class
+bm3 = xgb.XGBClassifier(objective='binary:logistic', # Or 'multi:softmax' for multi-class
                        n_estimators=1359,          # Number of boosting rounds (trees)
                        eta=0.09796,                # Step size shrinkage to prevent overfitting
                        max_depth=32,               # Maximum depth of a tree
@@ -189,9 +280,27 @@ bm = xgb.XGBClassifier(objective='binary:logistic', # Or 'multi:softmax' for mul
                        max_delta_step=1,
                        min_child_weight=16,
                        eval_metric='aucpr',
-                       random_state=123)           # For reproducibility
+                       random_state=123,
+                       n_jobs=-1
+)
 
-#bm.fit(X_train, y_train)
-#report(bm)
+start = time.time()
 
-#optimize(obj2)
+#rf1.fit(X_train, y_train)
+rf2.fit(X_train, y_train)
+#rf3.fit(X_train, y_train)
+#bm1.fit(X_train, y_train)
+#bm2.fit(X_train, y_train)
+#bm3.fit(X_train, y_train)
+
+end = time.time()
+print(end-start)
+
+#report(rf1)
+report(rf2)
+#report(rf3)
+#report(bm1)
+#report(bm2)
+#report(bm3)
+
+#pdp('repay1')

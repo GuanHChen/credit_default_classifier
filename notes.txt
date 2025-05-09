@@ -171,25 +171,46 @@ grid_search.fit(X_val, y_val)
 print(grid_search.best_score_) # 0.7861319869359884
 print(grid_search.best_params_) # {'criterion': 'entropy', 'max_depth': 20, 'min_samples_leaf': 10, 'min_samples_split': 100, 'n_estimators': 1500}
 
+Basic Forest
+BSL: 0.13785301673601663
+
 Optuna ROC_AUC
 {'n_estimators': 1809, 'max_depth': 31, 'min_samples_split': 123, 'min_samples_leaf': 27}
 AUC: 0.7878
+BSL: 0.13296771874634475
 
 Optuna F1
 {'n_estimators': 1086, 'max_depth': 41, 'min_samples_split': 115, 'min_samples_leaf': 2}
 AUC: 0.7874
-
-Optuna Recall
-{'n_estimators': 1086, 'max_depth': 41, 'min_samples_split': 115, 'min_samples_leaf': 2}
-
-F1 and Recall Same Parameters
+BSL: 0.13280654330297106
 
 Basic XGBoost: 1000 estimators, 0.1 learning rate, max depth 50
 AUC: 0.7509
+BSL: 0.1635929576630231
 
 Hyper Hypertuned XGBoost
 {'n_estimators': 1359, 'eta': 0.09796148646799241, 'max_depth': 32, 'gamma': 9, 'alpha': 8, 'reg_lambda': 6, 'max_delta_step': 1, 'min_child_weight': 16}
 AUC: 0.7872
+BSL: 0.1329201050971384
 
 Tuned XGBoost No Regularization AUCPR:
 AUC: 0.7446
+BSL: 0.15673727567788756
+
+Random Forest Robustness No Repay1
+late       0.235702
+repay2     0.125866
+AUC Score: 0.7797
+Prec .64
+Rec 0.28
+BSL 0.13846998941423283
+
+Random Forest Robustness No Late
+repay1     0.256655
+repay2     0.117113
+AUC Score: 0.7870
+Prec .70
+Rec .35
+BSL 0.1332414646747992
+
+

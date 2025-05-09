@@ -37,10 +37,10 @@ colnames(cc)[colnames(cc) == "default.payment.next.month"] <- "DEFAULT"
 
 cc$MARRIAGE[cc$MARRIAGE == 3] <- 0
 
-# cc <- cc %>%
-#   rename(LIM = LIMIT_BAL, REPAY1 = PAY_0, REPAY2 = PAY_2, REPAY3 = PAY_3, REPAY4 = PAY_4, REPAY5 = PAY_5, REPAY6 = PAY_6) %>%
-#   rename_with(.fn = function(x) gsub("BILL_AMT", "BILL", x), .cols = starts_with("BILL_AMT")) %>%
-#   rename_with(.fn = function(x) gsub("PAY_AMT", "PAY", x), .cols = starts_with("PAY_AMT"))
+cc <- cc %>%
+   rename(LIM = LIMIT_BAL, REPAY1 = PAY_0, REPAY2 = PAY_2, REPAY3 = PAY_3, REPAY4 = PAY_4, REPAY5 = PAY_5, REPAY6 = PAY_6) %>%
+   rename_with(.fn = function(x) gsub("BILL_AMT", "BILL", x), .cols = starts_with("BILL_AMT")) %>%
+   rename_with(.fn = function(x) gsub("PAY_AMT", "PAY", x), .cols = starts_with("PAY_AMT"))
 # 
 # bill_ot <- colMeans(cc[, paste0("BILL", 1:6)])
 # pay_ot <- colMeans(cc[, paste0("REPAY", 1:6)])
@@ -90,9 +90,8 @@ cc$MARRIAGE[cc$MARRIAGE == 3] <- 0
 #   summarize(across(starts_with("UTIL"), mean)) %>%
 #   as.numeric()
 # 
-# heatmap(cor(cc))
-# 
-# corrplot(cor(cc), method = "square")
+
+heatmap(cor(cc))
 
 #
 # EDA Summary
@@ -104,23 +103,23 @@ cc$MARRIAGE[cc$MARRIAGE == 3] <- 0
 #
 
 library(ggplot2)
-cc$default_factor <- factor(cc$DEFAULT, levels = c(0, 1), labels = c("Non-Default", "Default"))
-
-# Default vs Non Default
-ggplot(cc, aes(x = default_factor)) +
-  geom_bar(fill = c("darkgray", "darkorange2"), color = "black") + # You can customize the colors
-  labs(
-    title = "Default Imbalance",
-    x = "Default Status",
-    y = "Number of Individuals"
-  ) +
-  theme_classic() +
-  theme(plot.title = element_text(size = 20, hjust = 0.5),       # Title size
-        axis.title.x = element_text(size = 16),                 # X-axis label size
-        axis.title.y = element_text(size = 16),                 # Y-axis label size
-        axis.text.x = element_text(size = 12),                  # X-axis tick label size
-        axis.text.y = element_text(size = 12),                  # Y-axis tick label size
-  )
+# cc$default_factor <- factor(cc$DEFAULT, levels = c(0, 1), labels = c("Non-Default", "Default"))
+# 
+# # Default vs Non Default
+# ggplot(cc, aes(x = default_factor)) +
+#   geom_bar(fill = c("darkgray", "darkorange2"), color = "black") + # You can customize the colors
+#   labs(
+#     title = "Default Imbalance",
+#     x = "Default Status",
+#     y = "Number of Individuals"
+#   ) +
+#   theme_classic() +
+#   theme(plot.title = element_text(size = 20, hjust = 0.5),       # Title size
+#         axis.title.x = element_text(size = 16),                 # X-axis label size
+#         axis.title.y = element_text(size = 16),                 # Y-axis label size
+#         axis.text.x = element_text(size = 12),                  # X-axis tick label size
+#         axis.text.y = element_text(size = 12),                  # Y-axis tick label size
+#   )
 
 
 # Age Distribution
@@ -175,31 +174,31 @@ ggplot(cc, aes(x = factor(SEX))) +
 )
 
 
-aucs <- c(.536, .76,.79,.79,.75,.74,.79)
-cate <- c('Literature', 'Default\nForest','AUC\nForest','F1\nForest',
-          'Basic\nXGBoost','No Reg\XGBoost','AUC\nXGBoost')
-auc_df <- data.frame(
-  Model = cate,
-  AUC = aucs
-)
-auc_df$Model <- factor(auc_df$Model, levels = auc_df$Model)
+# aucs <- c(.536, .76,.79,.79,.75,.74,.79)
+# cate <- c('Literature', 'Default\nForest','AUC\nForest','F1\nForest',
+#           'Basic\nXGBoost','No Reg\XGBoost','AUC\nXGBoost')
+# auc_df <- data.frame(
+#   Model = cate,
+#   AUC = aucs
+# )
+# auc_df$Model <- factor(auc_df$Model, levels = auc_df$Model)
 
 # AUC Graph
-ggplot(auc_df, aes(x = Model, y = AUC )) +
-  geom_bar(stat = "identity", fill = "darkgray", color = "black") +
-  labs(
-    title = "AUC Score Comparison",
-    x = "Model",
-    y = "AUC"
-  ) +
-  theme_classic() +
-  theme(plot.title = element_text(size = 20, hjust = 0.5),       # Title size
-        axis.title.x = element_text(size = 16),                 # X-axis label size
-        axis.title.y = element_text(size = 16),                 # Y-axis label size
-        axis.text.x = element_text(size = 12, angle = 45, hjust = 1),                  # X-axis tick label size
-        axis.text.y = element_text(size = 12),                  # Y-axis tick label size
-  ) +
-  ylim(0, .9) # Set the y-axis limits from 0 to 1
+# ggplot(auc_df, aes(x = Model, y = AUC )) +
+#   geom_bar(stat = "identity", fill = "darkgray", color = "black") +
+#   labs(
+#     title = "AUC Score Comparison",
+#     x = "Model",
+#     y = "AUC"
+#   ) +
+#   theme_classic() +
+#   theme(plot.title = element_text(size = 20, hjust = 0.5),       # Title size
+#         axis.title.x = element_text(size = 16),                 # X-axis label size
+#         axis.title.y = element_text(size = 16),                 # Y-axis label size
+#         axis.text.x = element_text(size = 12, angle = 45, hjust = 1),                  # X-axis tick label size
+#         axis.text.y = element_text(size = 12),                  # Y-axis tick label size
+#   ) +
+#   ylim(0, .9) # Set the y-axis limits from 0 to 1
 
 
 # Feature importances
@@ -224,5 +223,30 @@ ggplot(fea_imp, aes(x = feature, y = importance )) +
         axis.text.y = element_text(size = 12),                  # Y-axis tick label size
   ) +
   ylim(0, .25)
+
+# Brier Score Loss
+bsl <- data.frame(
+  model = c("Default Forest", "AUC Forest", "F1 Forest", 
+            "Basic XGBoost", "AUC XGBoost No Reg", "AUC XGBoost"),
+  loss = c(0.13785301673601663, 0.13296771874634475, 0.13280654330297106, 
+           0.1635929576630231, 0.1329201050971384, 0.15673727567788756)
+)
+fea_imp$model <- factor(fea_imp$model, levels = fea_imp$model)
+
+ggplot(fea_imp, aes(x = model, y = loss)) +
+  geom_bar(stat = "identity", fill = "darkgray", color = "black") +
+  labs(
+    title = "Random Forest Feature Importances",
+    x = "Model",
+    y = "Brier Score Loss"
+  ) +
+  theme_classic() +
+  theme(plot.title = element_text(size = 20, hjust = 0.5),       # Title size
+        axis.title.x = element_text(size = 16),                 # X-axis label size
+        axis.title.y = element_text(size = 16),                 # Y-axis label size
+        axis.text.x = element_text(size = 12, angle = 45, hjust = 1),                  # X-axis tick label size
+        axis.text.y = element_text(size = 12),                  # Y-axis tick label size
+  ) 
+  #ylim(0, .25)
 
 
