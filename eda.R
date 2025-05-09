@@ -227,16 +227,16 @@ ggplot(fea_imp, aes(x = feature, y = importance )) +
 # Brier Score Loss
 bsl <- data.frame(
   model = c("Default Forest", "AUC Forest", "F1 Forest", 
-            "Basic XGBoost", "AUC XGBoost No Reg", "AUC XGBoost"),
+            "Basic XGBoost", "AUC XGBoost\nNo Reg", "AUC XGBoost"),
   loss = c(0.13785301673601663, 0.13296771874634475, 0.13280654330297106, 
            0.1635929576630231, 0.1329201050971384, 0.15673727567788756)
 )
-fea_imp$model <- factor(fea_imp$model, levels = fea_imp$model)
+bsl$model <- factor(bsl$model, levels = bsl$model)
 
-ggplot(fea_imp, aes(x = model, y = loss)) +
+ggplot(bsl, aes(x = model, y = loss)) +
   geom_bar(stat = "identity", fill = "darkgray", color = "black") +
   labs(
-    title = "Random Forest Feature Importances",
+    title = "Brier Score Loss Across Models",
     x = "Model",
     y = "Brier Score Loss"
   ) +
@@ -244,9 +244,9 @@ ggplot(fea_imp, aes(x = model, y = loss)) +
   theme(plot.title = element_text(size = 20, hjust = 0.5),       # Title size
         axis.title.x = element_text(size = 16),                 # X-axis label size
         axis.title.y = element_text(size = 16),                 # Y-axis label size
-        axis.text.x = element_text(size = 12, angle = 45, hjust = 1),                  # X-axis tick label size
+        axis.text.x = element_text(size = 12, angle = 0, hjust = 0.5),                  # X-axis tick label size
         axis.text.y = element_text(size = 12),                  # Y-axis tick label size
-  ) 
-  #ylim(0, .25)
+  ) +
+  ylim(0, .2)
 
 
