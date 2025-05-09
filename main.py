@@ -24,11 +24,15 @@ def pdp(feature):
         ice_lines_kw={'alpha': 0.3, 'linewidth': 0.5, 'color': 'lightsteelblue'}
     )
 
-    plt.suptitle(f'Partial Dependence and ICE Plot for {feature.title()}')  # Add a main title
+    plt.suptitle(f'Partial Dependence and ICE Plot for {feature.title()} Payments')  # Add a main title
     display.axes_[0, 0].set_ylabel('Increased Probability of Default')  # Set y-axis label
-    display.axes_[0, 0].set_xlabel(feature.title())  # Set y-axis label
+    display.axes_[0, 0].set_xlabel('Late Payments')  # Set y-axis label
+    ax = display.axes_[0, 0]
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(handles, labels, loc='upper left')
     plt.tight_layout()
     plt.show()
+
 
 
 def heatmap():
@@ -192,7 +196,7 @@ scaler = StandardScaler()  # initialize scaler
 scale_cols = ['lim', 'age',
               'bill1', 'bill2', 'bill3', 'bill4', 'bill5', 'bill6',
               'pay1', 'pay2', 'pay3', 'pay4', 'pay5', 'pay6',
-              'util', 'late', 'vol'
+              'util', 'vol'
               ]
 
 ct = ColumnTransformer(
@@ -297,10 +301,10 @@ end = time.time()
 print(end-start)
 
 #report(rf1)
-report(rf2)
+#report(rf2)
 #report(rf3)
 #report(bm1)
 #report(bm2)
 #report(bm3)
 
-#pdp('repay1')
+pdp('late')

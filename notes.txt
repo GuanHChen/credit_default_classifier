@@ -203,6 +203,7 @@ repay2     0.125866
 AUC Score: 0.7797
 Prec .64
 Rec 0.28
+F1: .39
 BSL 0.13846998941423283
 
 Random Forest Robustness No Late
@@ -211,6 +212,7 @@ repay2     0.117113
 AUC Score: 0.7870
 Prec .70
 Rec .35
+F1: .47
 BSL 0.1332414646747992
 
 
